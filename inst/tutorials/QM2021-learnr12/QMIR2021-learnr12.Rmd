@@ -11,8 +11,6 @@ library(learnrhash)
 gradethis:: gradethis_setup()
 
 library(tidyverse)
-data(df_learnr12)
-
 ```
 
 
