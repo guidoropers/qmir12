@@ -5,18 +5,20 @@ runtime: shiny_prerendered
 ---
 
 ```{r setup, include=FALSE}
-
 library(learnr)
 library(learnrhash)
+library(texreg)
 gradethis:: gradethis_setup()
 
 library(tidyverse)
+data(df_learnr12)
+load("df_learnr12.rda")
 ```
 
 
 ## Introduction
 
-Welcome to this week's tutorial! In today's tutorial you will run a pooled model, a fixed-effects model, compare the results and predicted values for Japan and Uruguay! Before we run a time-series cross-sectional model, though, let's repeat some key contents of the lecture. 
+Welcome to this week's learnr-exercises! In today's tutorial you will run a pooled model, a fixed-effects model, compare the results, and predict values for Japan and Uruguay! Before we start modeling, though, let's repeat some key contents of the lecture. 
 
 ```{r q1, echo = FALSE}
 question("Why does it make sense to use a TSCS model?",
@@ -33,7 +35,7 @@ question("Why does it make sense to use a TSCS model?",
 ```{r q2, echo = FALSE}
 question("What is **not** constant within units?",
   answer("The electoral system", message = "How often has the electoral system in your home-country changed in your lifetime?"),
-  answer("The unemployment rate of a country over time.", correct = T),
+  answer("The unemployment rate", correct = T),
   answer("Culture", message = "Though you may argue that culture is everchanging and subject to the understanding of the individual, for an FE-regression we may assume that it is somewhat constant over time."),
   random_answer_order = TRUE,
   allow_retry = T,
@@ -66,6 +68,8 @@ question("What happens when we use a unit-fixed effect?",
 
 ## Coding Exercises
 
+Góméz-Díaz and Góméz-Díaz (2020) have argued that prolonged membership in the European Union leads to an increase in regional authority in different member-states. However, they also include a variable for the duration of World Bank membership. In the following, we will focus on the effect of World Bank membership on sub-national authority. In a final step we will calculate predicted values for Japan and Uruguay.
+
 In the following exercises you will need these variables:
 
 | Variable name |  Description
@@ -82,73 +86,103 @@ In the following exercises you will need these variables:
 
 ### Preparing the data and running our first model.
 
-Let's take a look at our data `df_learnr12`. We want you to create a dummy variable for democracy. The dummy should take the value "1" if the "democ"-variable takes a value greater than 6. Label this new variable `democ_dummy`.
 
-Now that you have the `democ_dummy`-variable we want you to run a pooled model. Use the following variables: `n_RAI`, `length_EU`, `length_world`, `gdp_capita`, `population_size`, `nationalization`, `length_world`. Please include an interaction between the `length_world` variable and the new `democ_dummy` variable.
+Let's take a look at our data `df_learnr12`. In the first step, we want you to run a pooled model using the following variables: `n_RAI`, `length_EU`, `length_world`, `democ`, `gdp_capita`, `population_size`, and `nationalization`.
 
 
 ```{r exercise1, exercise = TRUE}
-# Create a dummy variable for countries that score higher than 6 on the "democ"-variable.
-
-
-# Run a model with an interaction term of the democ_dummy variable and the length_world variable.
-
-
+# Let's run our first model and call it pooled_model
 
 ```
 
-
 ```{r q5, echo = FALSE}
-question_text("What is the coefficient of the interaction? Round to two digits.",
-  answer("-0.14", correct = T),
+question_text("What is the coefficient of `length_world`.",
+  answer("-0.04", correct = T),
   allow_retry = TRUE,
-  incorrect = "Hint: specify the interaction with a '*' between the relevant terms."
+  incorrect = "Hint: Have you rounded correctly?"
 )
 ```
 
-Run the same model, but include a fixed-effect for the unit. Our unit is the country (`country_name`)`. What is the coefficient for the interaction now? Round to two digits.
 
+Now run the same model, but include a fixed-effect for the unit. Our unit is the country (`country_name`)`. Let's call this model "fe_model".
 ```{r exercise2, exercise = TRUE}
-
 
 ```
 
 
 ```{r q6, echo = FALSE}
-question_text(" What is the coefficient for the interaction now?",
-  answer("-0.01", correct = T),
+question_text(" What is the unit-specific intercept for Albania? Round the coefficient to two digits after the decimal.",
+  answer("0.86", correct = T),
   allow_retry = TRUE,
   incorrect = "Hint: is the fixed-effect correctly specified?"
 )
 ```
 
 ```{r q7, echo = FALSE}
-question("Comparing the two coefficients, what do you conclude?",
-  answer("Accounting for the unobserved, constant variation between countries has shown that there is no effect of World Bank membership that is conditional on being a democracy.", correct = T),
-  answer("We have different numbers of observation and therefore the coefficients differ.", message = "Take a look at the number of observations included in each model. Are they the same or do they differ?"),
-  answer("The coefficients are the same.", message = "If the coefficients are the same, you may want to retrace your steps and check your code whether there is an error."),
-  random_answer_order = TRUE,
-  allow_retry = T
+question_text("What is the coefficient for the duration of World Bank membership? Round the coefficient to two digits after the decimal.",
+  answer("0.03", correct = T),
+  allow_retry = TRUE,
+  incorrect = "Hint: is the fixed-effect correctly specified?"
 )
 ```
 
 
-In the final step, we want to calculate predicted values. Remember from the last sessions that predicted values can help us to communicate the results of our analysis. In the following section, the model has already been specified. Please calculate predicted values for membership in the **World Bank**. Specify scenarios for Uruguay and Japan. In which of the two countries is the predicted value for the maximum duration of World Bank membership higher? Use the `fe_model` specified below.
+
+```{r q8, echo = FALSE}
+question_text("If you wanted to present your results in a table using `screenreg()`, but wanted to exclude the country FE's from the table, what argument would you use?",
+  answer("omit.coef()", correct = T),
+  answer("omit.coef(country_name)", correct = T),
+  allow_retry = TRUE,
+  incorrect = "Hint: Take a look at the arguments of the screenreg()-function."
+)
+```
+
+
+```{r q9, echo = FALSE}
+question("Comparing the coefficients from the pooled model and from the FE model, what do you conclude?",
+         answer("Due to omitted variable bias our estimate we would have expected a negative relationship between the duration of World Bank membership. After accounting for the unobserved, constant variation between countries, we were able to show that the relationship is, in fact, positive and statistically significant.", correct = T),
+         answer("Accounting for the unobserved, constant variation between countries has shown that there is no effect of World Bank membership on regional authority"),
+         answer("We have different numbers of observation and therefore the coefficients differ.", message = "Take a look at the number of observations included in each model. Are they the same or do they differ?"),
+         answer("The coefficients are the same.", message = "If the coefficients are the same, you may want to retrace your steps and check your code whether there is an error."),
+         random_answer_order = TRUE,
+         allow_retry = T
+)
+```
+
+
+In the next step, we want to calculate predicted values. Remember from the last sessions that predicted values can help us to communicate the results of our analysis. In the following section, the model has already been specified. Please calculate predicted values for membership in the **World Bank**. Compare the predictions for the maximum duration of World Bank membership. In which of the two countries is the predicted value higher?
 
 
 ```{r exercise3, exercise = TRUE}
-fe_model <- lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name, data = df_learnr12)
 
 ```
 
-```{r q8, echo = FALSE}
-question("Comparing the predicted values, in which country is the preiction for sub-national authority higher?",
+```{r q10, echo = FALSE}
+question("Comparing the predicted values, in which country is the prediction for sub-national authority higher?",
   answer("Japan", message = "Keep in mind that confidence intervals are important!"),
   answer("Uruguay", message = "Keep in mind that confidence intervals are important!"),
-  answer("Unclear, because the CIs overlap.", correct = T),
+  answer("Unclear, because the confidence intervals overlap.", correct = T),
   random_answer_order = TRUE,
   allow_retry = T)
 ```
+
+In a final step, we want you to calculate predicted values for minimum and maximum values of World Bank membership for Japan and compare them.
+
+
+```{r exercise4, exercise = TRUE}
+
+
+```
+
+```{r q11, echo = FALSE}
+question_text("What is the difference in predicted values for minimum and maximum World Bank membership for Japan? Round to two digits after the decimal",
+  answer("2.10", correct = T),
+  answer("2.1", correct = T),
+  allow_retry = T,
+  incorrect = "Did you correctly specify the scenarios?")
+```
+
+
 
 ## Submit
 
@@ -157,6 +191,5 @@ learnrhash::encoder_logic()
 ```
 
 ```{r encode, echo=FALSE}
-learnrhash::encoder_ui(default_ui(url =
-  "https://docs.google.com/spreadsheets/d/1KNdne1kXXIHybooh0Z71SYrVSd1NBfBTm60PhYeTsnQ/edit?usp=sharing"))
+learnrhash::encoder_ui(default_ui(url = ""))
 ```
