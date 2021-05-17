@@ -16,7 +16,7 @@ gradethis:: gradethis_setup()
 
 library(tidyverse)
 data(df_learnr12)
-load("df_learnr12.rda")
+#load(df_learnr12.rda)
 ```
 
 
@@ -161,7 +161,7 @@ Remember from the last sessions that predicted values can help us to communicate
 
 
 ```{r exercise3, exercise = TRUE}
-#fe_model <-  lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name-1, data = df_learnr12)
+fe_model <-  lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name-1, data = df_learnr12)
 
 ```
 
