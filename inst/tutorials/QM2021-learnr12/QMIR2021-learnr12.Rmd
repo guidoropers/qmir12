@@ -1,6 +1,10 @@
 ---
 title: "Learnr Exercises - Week 12 - Time-Series Cross-Sectional Analysis"
-output: learnr::tutorial
+output: 
+  learnr::tutorial:
+    progressive: true
+    allow_skip: false
+    css: "css/learnr-theme.css"
 runtime: shiny_prerendered
 ---
 
@@ -22,10 +26,10 @@ Welcome to this week's learnr-exercises! In today's tutorial you will run a pool
 
 ```{r q1, echo = FALSE}
 question("Why does it make sense to use a TSCS model?",
-  answer("To adress concerns about omitted variable bias", message = "That is correct, but are the other answer options false?"),
-  answer("To adress concerns about confounding", message = "That is correct, but are the other answer options false?"),
-  answer("To account for potential exogenous shocks", message = "That is correct, but are the other answer options false?"),
-  answer("All answer options are correct", correct = T),
+  answer("To adress concerns about omitted variable bias", correct = T),
+  answer("To account for potential exogenous shocks", correct = T),
+  answer("To deal with NAs in our data set"),
+  answer("To incorporate unit-specific, time-varying characteristics in our model"),
   random_answer_order = F,
   allow_retry = T,
   incorrect = "Hint: You may want to check the lecture materials."
@@ -33,7 +37,7 @@ question("Why does it make sense to use a TSCS model?",
 ```
 
 ```{r q2, echo = FALSE}
-question("What is **not** constant within units?",
+question("What is commonly **not** constant within units over time?",
   answer("The electoral system", message = "How often has the electoral system in your home-country changed in your lifetime?"),
   answer("The unemployment rate", correct = T),
   answer("Culture", message = "Though you may argue that culture is everchanging and subject to the understanding of the individual, for an FE-regression we may assume that it is somewhat constant over time."),
@@ -66,7 +70,7 @@ question("What happens when we use a unit-fixed effect?",
 ```
 
 
-## Coding Exercises
+## Regression Exercises
 
 Góméz-Díaz and Góméz-Díaz (2020) have argued that prolonged membership in the European Union leads to an increase in regional authority in different member-states. However, they also include a variable for the duration of World Bank membership. In the following, we will focus on the effect of World Bank membership on sub-national authority. In a final step we will calculate predicted values for Japan and Uruguay.
 
@@ -149,11 +153,15 @@ question("Comparing the coefficients from the pooled model and from the FE model
 )
 ```
 
+## Prediction
 
-In the next step, we want to calculate predicted values. Remember from the last sessions that predicted values can help us to communicate the results of our analysis. In the following section, the model has already been specified. Please calculate predicted values for membership in the **World Bank**. Compare the predictions for the maximum duration of World Bank membership. In which of the two countries is the predicted value higher?
+Remember from the last sessions that predicted values can help us to communicate the results of our analysis. In the following section, the model has already been specified. Please calculate predicted values and confidence intervals for the maximum duration of membership in the **World Bank** for Uruguay and Japan. Compare the predictions. In which of the two countries is the predicted value higher? Don't forget about the confidence intervals.
+
+
 
 
 ```{r exercise3, exercise = TRUE}
+fe_model <-  lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name-1, data = df_learnr12)
 
 ```
 
