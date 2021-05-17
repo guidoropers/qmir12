@@ -16,7 +16,7 @@ gradethis:: gradethis_setup()
 
 library(tidyverse)
 data(df_learnr12)
-#load(df_learnr12.rda)
+#load("df_learnr12.rda")
 ```
 
 
@@ -95,7 +95,6 @@ Let's take a look at our data `df_learnr12`. In the first step, we want you to r
 
 
 ```{r exercise1, exercise = TRUE}
-# Let's run our first model and call it pooled_model
 
 ```
 
