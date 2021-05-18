@@ -15,6 +15,7 @@ library(texreg)
 gradethis:: gradethis_setup()
 
 library(tidyverse)
+library(qmir12)
 data(df_learnr12)
 #load("df_learnr12.rda") # for local testing
 ```
@@ -157,9 +158,6 @@ question("Comparing the coefficients from the pooled model and from the FE model
 
 Remember from the last sessions that predicted values can help us to communicate the results of our analysis. In the following section, the model has already been specified. Please calculate predicted values and confidence intervals for the maximum duration of membership in the **World Bank** for Uruguay and Japan. Compare the predictions. In which of the two countries is the predicted value higher? Don't forget about the confidence intervals.
 
-
-
-
 ```{r exercise3, exercise = TRUE}
 fe_model <-  lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name-1, data = df_learnr12)
 
@@ -176,8 +174,11 @@ question("Comparing the predicted values, in which country is the prediction for
 
 In a final step, we want you to calculate predicted values for minimum and maximum values of World Bank membership for Japan and compare them.
 
+```{r exercise4-setup}
+fe_model <-  lm(n_RAI ~ length_EU + length_world + democ + gdp_capita + population_size + nationalization + country_name-1, data = df_learnr12)
+```
 
-```{r exercise4, exercise = TRUE}
+```{r exercise4, exercise = TRUE,  exercise.setup = "exercise4-setup"}
 
 
 ```
