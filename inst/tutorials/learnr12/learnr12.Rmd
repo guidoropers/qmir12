@@ -37,7 +37,7 @@ question("Why does it make sense to use a TSCS model?",
 ```
 
 ```{r q2, echo = FALSE}
-question("What is commonly **not** constant within units over time?",
+question("What is commonly *not* constant within units over time?",
   answer("The electoral system", message = "How often has the electoral system in your home-country changed in your lifetime?"),
   answer("The unemployment rate", correct = T),
   answer("Culture", message = "Though you may argue that culture is everchanging and subject to the understanding of the individual, for an FE-regression we may assume that it is somewhat constant over time."),
